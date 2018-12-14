@@ -1,0 +1,19 @@
+Build and Deploy Runbook :
+docker build -t docker-centos-java .
+(cd ..; mvn install)
+(cd ../target; docker run -it --expose 8080 -p 8080:8080 -v `pwd`:`pwd` -w `pwd` docker-centos-java java -jar ./app/web.0.0.1-SNAPSHOT.jar -p 8080)
+
+
+Temporary Help :
+docker build -t docker-centos-java .
+docker run -it docker-centos-java bash
+docker run -it -v `pwd`:`pwd` -w `pwd` docker-centos-java pwd
+(cd ..; mvn install; cd -)
+java -jar web.0.0.1-SNAPSHOT.jar
+(cd ../target; docker run -it --expose 8080 -v `pwd`:`pwd` -w `pwd` docker-centos-java java -jar ./app/web.0.0.1-SNAPSHOT.jar)
+(cd ../target; docker run -P -it -v `pwd`:`pwd` -w `pwd` docker-centos-java java -jar ./app/web.0.0.1-SNAPSHOT.jar)
+(cd ../target; java -jar ./app/web.0.0.1-SNAPSHOT.jar)
+(cd ../target; docker run -P -it -v `pwd`:`pwd` -w `pwd` docker-centos-java ifconfig)
+
+(cd ../target; docker run -it -p 80:8080 -p 443:8443 jetty java -jar ./app/web.0.0.1-SNAPSHOT.jar)
+(cd ../target; docker run -it -p 80:8080 -p 443:8443 -v `pwd`:`pwd` -w `pwd` jetty java -jar ./app/web.0.0.1-SNAPSHOT.jar)

@@ -1,0 +1,269 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>ivan.dev</groupId>
+  <artifactId>web</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>web</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<swagger-version>1.5.18</swagger-version>
+	<swagger-ui-version>2.1.4</swagger-ui-version>
+	<vaadin.version>8.3.1</vaadin.version>
+    <org.apache.cxf.version>3.0.0-milestone2</org.apache.cxf.version>
+    <org.springframework.version>4.3.7.RELEASE</org.springframework.version>
+    <org.eclipse.jetty.version>9.1.3.v20140225</org.eclipse.jetty.version>
+	<!-- Build -->
+	<project.main.entrypoint>ivan.dev.web.Main</project.main.entrypoint>
+  </properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.3.1</version>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/app</outputDirectory>
+							<resources>
+								<resource>
+									<directory>resources</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/app/lib</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>${project.main.entrypoint}</mainClass>
+						</manifest>
+						<manifestEntries>
+							<Class-Path>.</Class-Path>
+						</manifestEntries>
+					</archive>
+					<finalName>app/${name}.${version}</finalName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-bom</artifactId>
+				<version>${vaadin.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+  <dependencies>
+  
+        <dependency>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+              <version>${org.apache.cxf.version}</version>
+        </dependency>
+           
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-client</artifactId>
+            <version>${org.apache.cxf.version}</version>
+        </dependency>
+           
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+                        
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${org.eclipse.jetty.version}</version>                      
+        </dependency>
+                    
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${org.eclipse.jetty.version}</version>                      
+        </dependency>    
+        
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.1.0.Final</version>            
+        </dependency>
+        
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+  
+  	<!-- Tests -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+	
+	<!-- Command Line Parser : args4j -->
+	<dependency>
+    	<groupId>args4j</groupId>
+    	<artifactId>args4j</artifactId>
+    	<version>2.33</version>
+	</dependency>
+	
+	<!-- Logback Classic -->
+	<dependency>
+    	<groupId>ch.qos.logback</groupId>
+    	<artifactId>logback-classic</artifactId>
+    	<version>1.1.7</version>
+	</dependency>
+	
+	<!-- Log4j - SLF4J bridge -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>log4j-over-slf4j</artifactId>
+      <version>1.7.21</version>
+    </dependency>
+    
+    <!-- JUL - SLF4J bridge -->
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+     	<artifactId>jul-to-slf4j</artifactId>
+    	<version>1.7.21</version>
+	</dependency>
+    
+    <!-- Groovy -->
+	<dependency>
+    	<groupId>org.codehaus.groovy</groupId>
+    	<artifactId>groovy</artifactId>
+    	<version>2.4.7</version>
+	</dependency>
+    
+    <!-- Swagger Stuff -->
+    <dependency>
+      <groupId>io.swagger</groupId>
+      <artifactId>swagger-jaxrs</artifactId>
+      <version>${swagger-version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>javax.inject</groupId>
+	    <artifactId>javax.inject</artifactId>
+	    <version>1</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.fasterxml.jackson.jaxrs</groupId>
+	    <artifactId>jackson-jaxrs-json-provider</artifactId>
+	    <version>2.9.4</version>
+	</dependency>
+
+    
+    <!-- Vaadin -->
+	<dependency>
+		<groupId>com.vaadin</groupId>
+		<artifactId>vaadin-server</artifactId>
+		<version>${vaadin.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>com.vaadin</groupId>
+		<artifactId>vaadin-client-compiled</artifactId>
+		<version>${vaadin.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>com.vaadin</groupId>
+		<artifactId>vaadin-themes</artifactId>
+		<version>${vaadin.version}</version>
+	</dependency>
+		
+	<!-- jsoup -->
+    <dependency>
+    	<groupId>org.jsoup</groupId>
+    	<artifactId>jsoup</artifactId>
+    	<version>1.11.3</version>
+	</dependency>
+	
+	<!-- Http Client -->
+		<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+		<version>4.5.5</version>
+	</dependency>
+		
+  </dependencies>
+  
+</project>
